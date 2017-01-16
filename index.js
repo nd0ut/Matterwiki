@@ -17,11 +17,20 @@ var jwt = require('jsonwebtoken');
 var misc = require('./misc.js');
 var config = require('./config'); //config file in the app directory which contains the JWT key
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
+
 app.set('superSecret', config.auth_secret); // secret variable
 
 // Using the body parser middleware to parse request body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(allowCrossDomain);
 
 
 app.get('/api',function(req,res){
@@ -36,7 +45,6 @@ require('./api/authentication')(app);
 require('./api/setup')(app);
 
 apiRoutes.use(function(req, res, next) {
-
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -63,6 +71,15 @@ apiRoutes.use(function(req, res, next) {
     });
 
   } else {
+    if(config.public_mode) {
+      if(req.method === 'GET') {
+        return next();
+      }
+      if(req.method === 'OPTIONS' && req.headers['access-control-request-method'] === 'GET') {
+        return next();
+      }
+    }
+
     // if there is no token
     // return an error
     return res.status(403).json({

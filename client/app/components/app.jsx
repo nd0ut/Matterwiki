@@ -11,9 +11,9 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    if(window.localStorage.getItem('userToken')==null) {
-      hashHistory.push('login');
-    }
+    // if(window.localStorage.getItem('userToken')==null) {
+    //   hashHistory.push('login');
+    // }
   }
 
   handleLogout() {

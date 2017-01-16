@@ -79,7 +79,7 @@ module.exports = function(app) {
     });
 
 
-  app.get('/topic/:id/articles',function(req,res){
+  app.get('/topics/:id/articles',function(req,res){
     /*
     This is a GET endpoint that responds with the list of all the articles that belong to a particular topic (topic of given id param)
     the articles are present in the data object in the returning object.

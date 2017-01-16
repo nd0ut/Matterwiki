@@ -8,6 +8,7 @@ class ViewArticle extends React.Component {
     super(props);
     this.deleteArticle = this.deleteArticle.bind(this);
     this.state = {article: {}, loading: true};
+    this.authorized = !!window.localStorage.getItem('userToken');
   }
 
   componentDidUpdate() {
@@ -70,6 +71,33 @@ class ViewArticle extends React.Component {
     return { __html: this.state.article.body };
   }
 
+  getSidebar() {
+    if(!this.authorized) {
+      return null;
+    }
+
+    return (
+      <div className="col-md-3 article-sidebar">
+        <div className="sidebar-block">
+        <div className="sidebar-title">Filed under</div>
+        <h2 className="color-text"><b>{this.state.article.topic.name}</b></h2>
+        </div>
+        <div className="sidebar-block">
+        <div className="sidebar-title">Last Updated By</div>
+        <h3><b>{this.state.article.user.name}</b></h3>
+        <p>{this.state.article.user.about}</p>
+        </div>
+        <div className="sidebar-block">
+        <div className="sidebar-title">What Changed in last edit</div>
+        {(this.state.article.what_changed) ? <h4>{this.state.article.what_changed}</h4> : <h4>No information available</h4>}
+        </div>
+        <Link to={'/article/edit/'+this.state.article.id} className="btn btn-default btn-block btn-lg">Edit</Link>
+        <Link to={'/article/history/'+this.state.article.id} className="btn btn-default btn-block btn-lg">History</Link>
+        {(window.localStorage.getItem('userId')==1) ? <button className="btn btn-default btn-block btn-lg" onClick={this.deleteArticle}>Delete</button>
+      : ''}
+      </div>
+    );
+  }
 
   render () {
     if(this.state.loading)
@@ -89,25 +117,7 @@ class ViewArticle extends React.Component {
               dangerouslySetInnerHTML={this.getRawMarkupBody()}>
             </div>
           </div>
-          <div className="col-md-3 article-sidebar">
-            <div className="sidebar-block">
-            <div className="sidebar-title">Filed under</div>
-            <h2 className="color-text"><b>{this.state.article.topic.name}</b></h2>
-            </div>
-            <div className="sidebar-block">
-            <div className="sidebar-title">Last Updated By</div>
-            <h3><b>{this.state.article.user.name}</b></h3>
-            <p>{this.state.article.user.about}</p>
-            </div>
-            <div className="sidebar-block">
-            <div className="sidebar-title">What Changed in last edit</div>
-            {(this.state.article.what_changed) ? <h4>{this.state.article.what_changed}</h4> : <h4>No information available</h4>}
-            </div>
-            <Link to={'/article/edit/'+this.state.article.id} className="btn btn-default btn-block btn-lg">Edit</Link>
-            <Link to={'/article/history/'+this.state.article.id} className="btn btn-default btn-block btn-lg">History</Link>
-            {(window.localStorage.getItem('userId')==1) ? <button className="btn btn-default btn-block btn-lg" onClick={this.deleteArticle}>Delete</button>
-          : ''}
-          </div>
+          {this.getSidebar()}
             </div>
 
               <div className="modal modal-fullscreen fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -17,7 +17,7 @@ import EditUser from './components/edit_users.jsx';
 render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Login}/>
+      <IndexRoute component={Home}/>
       <Route path="home" component={Home}/>
       <Route path="login" component={Login}/>
         <Route path="article/new" component={NewArticle}/>
