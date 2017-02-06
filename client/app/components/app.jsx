@@ -35,7 +35,10 @@ class App extends React.Component {
               <span className="icon-bar"></span>
             </button>
               <Link to='home' className="navbar-brand">
-                <img src="../assets/logo.png"></img>
+                <h1>
+                  <img src="http://solab.rshu.ru/media/1282/siows-circle.png"></img>
+                  SIOWS WIKI
+                </h1>
               </Link>
           </div>
 
