@@ -27,7 +27,6 @@ class App extends React.Component {
     return(
       <div>
       <nav className="navbar container-fluid navbar-default">
-          {(window.localStorage.getItem('userToken')) ?
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
               <span className="sr-only">Toggle navigation</span>
@@ -39,32 +38,38 @@ class App extends React.Component {
                 <img src="../assets/logo.png"></img>
               </Link>
           </div>
-          :
-          <center>
-          <a className="navbar-login-logo" href="#">
-            <img src="../assets/logo.png"></img>
-          </a>
-        </center>
-        }
-          {(window.localStorage.getItem('userToken')) ?
+
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
-              {(window.localStorage.getItem('userId')==1) ?
+              {(window.localStorage.getItem('userToken') && window.localStorage.getItem('userId')==1) ?
                 <li><Link to="admin" className="">Admin
                   </Link>
                 </li> :
                 ''
               }
-             <li><Link to="article/new" className="">New Article
-              </Link>
-            </li>
-            <li>
-              <a href="" onClick={this.handleLogout} >Logout</a>
-            </li>
+              {(window.localStorage.getItem('userToken')) ?
+                 <li>
+                  <Link to="article/new" className="">
+                    New Article
+                  </Link>
+                </li>
+                :
+                null
+              }
+              {(window.localStorage.getItem('userToken')) ?
+                <li>
+                  <a href="" onClick={this.handleLogout} >Logout</a>
+                </li>
+                :
+                <li>
+                  <Link to="login" className="">
+                    Login
+                  </Link>
+                </li>
+              }
             </ul>
             <SearchForm />
           </div>
-          : <div/>}
       </nav>
         <div className="content container">
           {that.props.children}
